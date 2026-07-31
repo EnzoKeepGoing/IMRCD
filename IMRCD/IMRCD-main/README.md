@@ -9,6 +9,34 @@ The public release contains only the complete model and its
 reproducibility pipeline. Ablation switches, visualization utilities,
 experiment logs, and intermediate files are excluded.
 
+## Motivation
+
+The motivation figure illustrates why response performance may provide
+limited information for distinguishing students on low-accuracy exercises.
+Students with different ability levels can produce similarly incorrect
+responses on these exercises, even though their response outcomes differ on
+exercises with higher accuracy. The figure also reports the distribution of
+exercise accuracy in the THINK dataset.
+
+Place the introduction figure at `figures/motivation.png`.
+
+<!-- Introduction and motivation figure from the paper. -->
+![Motivation of IMRCD](figures/motivation.png)
+
+## Framework
+
+The framework figure presents the complete IMRCD process. IMRCD constructs a
+memory query from the target student and current exercise, reads relevant
+information from the learnable interaction memory bank, generates updates for
+individual KCs through memory-guided KC interaction, and incorporates these
+updates into static KC representations through concept-wise fusion. The
+enhanced KC representations are then used for response prediction.
+
+Place the framework figure at `figures/framework.png`.
+
+<!-- Overall framework of IMRCD. -->
+![Framework of IMRCD](figures/framework.png)
+
 ## Repository structure
 
 ```text
@@ -17,6 +45,13 @@ IMRCD-main/
 |   `-- main_experiments.csv
 |-- data/
 |   |-- THINK/
+|   |   |-- grade_3_data_en.csv
+|   |   |-- train_valid.csv
+|   |   |-- test.csv
+|   |   |-- q_matrix.csv
+|   |   `-- id_mapping.json
+|   `-- README.md
+|-- figures/
 |   `-- README.md
 |-- imrcd/
 |   |-- data/
@@ -54,9 +89,19 @@ interactions, maps all identifiers to zero-based indices, reserves 20% of
 each student's interactions as a fixed test set, and assigns the remaining
 interactions to five folds.
 
+The raw THINK interactions used in this release are provided at:
+
+```text
+data/THINK/grade_3_data_en.csv
+```
+
+The original local filename `grade_3_data_en (12).csv` has been renamed to
+`grade_3_data_en.csv` for the public release. Run the following command from
+the repository root to reproduce the processed THINK files:
+
 ```bash
 python preprocess_dataset.py \
-  --input path/to/raw_interactions.csv \
+  --input data/THINK/grade_3_data_en.csv \
   --output-dir data/THINK \
   --user-column user_id \
   --exercise-column question_id \
@@ -68,6 +113,21 @@ python preprocess_dataset.py \
   --fold-count 5 \
   --seed 42
 ```
+
+The command generates the following files:
+
+```text
+data/THINK/train_valid.csv
+data/THINK/test.csv
+data/THINK/q_matrix.csv
+data/THINK/id_mapping.json
+data/THINK/statistics.json
+```
+
+`train_valid.csv` contains the interactions used for five-fold training and
+validation, while `test.csv` is the fixed test set. `q_matrix.csv` records the
+exercise-KC associations, `id_mapping.json` stores the zero-based identifier
+mappings, and `statistics.json` summarizes the processed dataset.
 
 See `data/README.md` for the processed file format.
 
@@ -227,13 +287,20 @@ folds on the fixed test set. The best result in each setting is shown in
 | MATH_G7 | 30%-70% | 0.6741 +/- 0.0046 | 0.6141 +/- 0.0094 | 0.6660 +/- 0.0137 | **0.6778 +/- 0.0092** |
 | MATH_G7 | Above 70% | 0.7086 +/- 0.0048 | 0.7230 +/- 0.0068 | 0.7508 +/- 0.0017 | **0.7742 +/- 0.0040** |
 
-## Appendix figure
+## Appendix visualization
 
-Place the appendix figure at `figures/appendix_figure.png`. After the file is
-added, it will be displayed below.
+The appendix figure visualizes the diagnostic representations associated with
+two student response patterns. The first group answers low-accuracy exercises
+incorrectly but high-accuracy exercises correctly, whereas the second group
+answers both types incorrectly. The group centers and main distributions show
+how IMRCD distinguishes students who exhibit similar response outcomes on
+low-accuracy exercises but differ in their overall response performance.
 
-<!-- Replace figures/appendix_figure.png with the final appendix figure. -->
-![Appendix figure](figures/appendix_figure.png)
+Place the appendix figure at
+`figures/appendix_diagnostic_visualization.png`.
+
+<!-- Diagnostic-representation visualization used in the appendix. -->
+![Diagnostic representation visualization](figures/appendix_diagnostic_visualization.png)
 
 ## Core implementation
 

@@ -1,0 +1,6 @@
+dataset,fold,seed,embedding_dim,interaction_dim,memory_slots,residual_scale,query_gamma_max,learning_rate,batch_size
+THINK,0,42,80,8,16,0.01,0.08,0.001,64
+THINK,1,42,80,16,8,0.001,0.01,0.002,64
+THINK,2,42,100,11,8,0.001,0.10,0.0015,64
+THINK,3,42,100,11,8,0.0001,0.08,0.001,32
+THINK,4,42,100,16,16,0.001,0.50,0.001,64
